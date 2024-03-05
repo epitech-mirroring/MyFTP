@@ -7,13 +7,22 @@
 */
 
 #include <arpa/inet.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "ftp_client.h"
 
-ftp_client_t ftp_client_init(int socket, struct sockaddr_in *csin)
+ftp_client_t *ftp_client_init(int socket, struct sockaddr_in *csin)
 {
-    return (ftp_client_t) {
-            .socket = socket,
-            .ip = inet_ntoa(csin->sin_addr),
-            .port = ntohs(csin->sin_port)
-    };
+    ftp_client_t *client = malloc(sizeof(ftp_client_t));
+
+    client->socket = socket;
+    client->ip = inet_ntoa(csin->sin_addr);
+    client->port = ntohs(csin->sin_port);
+    return client;
+}
+
+void ftp_client_destroy(ftp_client_t *client)
+{
+    close(client->socket);
+    free(client);
 }

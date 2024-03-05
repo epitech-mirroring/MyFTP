@@ -8,8 +8,10 @@
 
 # All the source files
 SOURCES			= src/main.c								\
-				  src/FTPServer.c							\
-				  src/FTPClient.c							\
+				  src/ftp_server.c							\
+				  src/ftp_server_advanced.c					\
+				  src/ftp_client.c							\
+				  src/ftp_client_manager.c					\
 
 TESTS			=
 

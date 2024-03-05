@@ -14,4 +14,6 @@ typedef struct ftp_client_s {
     int port;
 } ftp_client_t;
 
-ftp_client_t ftp_client_init(int socket, struct sockaddr_in *csin);
+// ------------------ Constructors / Destructors ------------------
+ftp_client_t *ftp_client_init(int socket, struct sockaddr_in *csin);
+void ftp_client_destroy(ftp_client_t *client);

@@ -17,10 +17,18 @@ typedef struct ftp_server_s {
     int binded;
     char *path;
     size_t nb_clients;
-    ftp_client_t *clients;
+    ftp_client_t **clients;
     bool running;
+    int max_socket;
 } ftp_server_t;
 
+// ------------------ Constructors / Destructors ------------------
 ftp_server_t *ftp_server_create(int port, char *path);
+void ftp_server_destroy(ftp_server_t *server);
+
+// ------------------ Methods ------------------
+void ftp_server_start(ftp_server_t *server);
+void ftp_server_stop(ftp_server_t *server);
 void ftp_server_run(ftp_server_t *server);
-void ftp_server_manage_client(ftp_server_t *server);
+void ftp_server_accept_client(ftp_server_t *server);
+void ftp_server_disconnect_client(ftp_server_t *server, size_t index);
