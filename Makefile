@@ -7,14 +7,16 @@
 ##
 
 # All the source files
-SOURCES	= src/main.c								\
+SOURCES			= src/main.c								\
+				  src/FTPServer.c							\
+				  src/FTPClient.c							\
 
-TESTS	=
+TESTS			=
 
 # Compiler and linker settings
 NAME 			= myftp
 CC				= gcc
-FLAGS			= -W -Wall -Wextra --coverage --std=c11
+FLAGS			= -W -Wall -Wextra --coverage --std=c11 -I./include
 OBJS			= $(SOURCES:.c=.o)
 TESTS_OBJS		= $(TESTS:.c=.o)
 LOG				= ./build.log
