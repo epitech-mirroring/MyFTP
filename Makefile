@@ -7,19 +7,23 @@
 ##
 
 # All the source files
-CXX_SOURCES	= src/main.cpp								\
+SOURCES			= src/main.c								\
+				  src/ftp_server.c							\
+				  src/ftp_server_advanced.c					\
+				  src/ftp_client.c							\
+				  src/ftp_client_manager.c					\
 
-CXX_TESTS	=
+TESTS			=
 
 # Compiler and linker settings
 NAME 			= myftp
-XX				= g++
-XXFLAGS			= -W -Wall -Wextra -std=c++20 --coverage
-CXX_OBJS		= $(CXX_SOURCES:.cpp=.o)
-CXX_TESTS_OBJS	= $(CXX_TESTS:.cpp=.o)
+CC				= gcc
+FLAGS			= -W -Wall -Wextra --coverage --std=c11 -I./include
+OBJS			= $(SOURCES:.c=.o)
+TESTS_OBJS		= $(TESTS:.c=.o)
 LOG				= ./build.log
 
-.PHONY: $(NAME) all clean fclean re tests_run clean_test
+.PHONY: $(NAME) all clean fclean re tests_run clean_test $(OBJS) $(TESTS_OBJS)
 
 # Colors and formatting
 GREEN =		\033[1;32m
@@ -35,10 +39,10 @@ FAILURE = [$(RED)✘$(RESET)]
 
 all:		$(NAME)
 
-$(NAME):	$(CXX_OBJS)
+$(NAME):	$(OBJS)
 # Link the object files
 		@printf "$(RUNNING) $(BLUE) 🔗  Linking$(RESET)"
-		@$(XX) -o $(NAME) $(CXX_OBJS) $(XXFLAGS) >> $(LOG) 2>&1 \
+		@$(CC) -o $(NAME) $(OBJS) $(FLAGS) >> $(LOG) 2>&1 \
 		&& printf "\r$(SUCCESS)\n" || printf "\r$(FAILURE)\n"
 # Check if the binary was created
 		@if [ -f $(NAME) ]; then \
@@ -49,15 +53,15 @@ $(NAME):	$(CXX_OBJS)
 			cat $(LOG); \
 		fi
 
-$(CXX_OBJS):	%.o: %.cpp
+$(OBJS):	%.o: %.c
 # Compile the source file
 		@printf "$(RUNNING) $(BLUE) 🔨  $$(basename $<)$(RESET)"
-		@$(XX) -o $@ -c $< $(XXFLAGS) >> $(LOG) 2>&1 \
+		@$(CC) -o $@ -c $< $(FLAGS) >> $(LOG) 2>&1 \
 		&& printf "\r$(SUCCESS)\n" || printf "\r$(FAILURE)\n"
 
 clean:
 # Delete all the object files
-		@for file in $(CXX_OBJS); do \
+		@for file in $(OBJS); do \
 			printf "$(RUNNING) $(RED) 🗑️   Deleting $$file$(RESET)"; \
 			rm -f $$file >> $(LOG) 2>&1 \
 			&& printf "\r$(SUCCESS)\n" || printf "\r$(FAILURE)\n"; \
@@ -75,15 +79,15 @@ fclean: clean clean_test
 
 re:			fclean all
 
-$(CXX_TESTS_OBJS):	%.o: %.cpp
+$(TESTS_OBJS):	%.o: %.c
 		@printf "$(RUNNING) $(BLUE) 🔨  $$(basename $<)$(RESET)"
-		@$(XX) -o $@ -c $< $(XXFLAGS) >> $(LOG) 2>&1 \
+		@$(CC) -o $@ -c $< $(FLAGS) >> $(LOG) 2>&1 \
 		&& printf "\r$(SUCCESS)\n" || printf "\r$(FAILURE)\n"
 
-tests_run: fclean $(CXX_OBJS) $(CXX_TESTS_OBJS)
+tests_run: fclean $(OBJS) $(TESTS_OBJS)
 	@printf "$(RUNNING) $(BLUE) 🔗  Linking$(RESET)"
-	@$(XX) -o tests.out $(filter-out src/main.o, $(CXX_OBJS)) \
-	$(CXX_TESTS_OBJS) $(XXFLAGS) --coverage >> $(LOG) 2>&1 \
+	@$(CC) -o tests.out $(filter-out src/main.o, $(OBJS)) \
+	$(TESTS_OBJS) $(FLAGS) --coverage >> $(LOG) 2>&1 \
 	-lcriterion >> $(LOG) 2>&1 \
 	&& printf "\r$(SUCCESS)\n" || printf "\r$(FAILURE)\n";
 	@printf "$(RUNNING)$(BLUE)  🧪  Running tests$(RESET)" \
