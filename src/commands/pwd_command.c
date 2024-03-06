@@ -18,6 +18,7 @@ void register_pwd_command(void)
     cmd->callback = &pwd_callback;
     cmd->expected_args_nb = 0;
     cmd->help = "Print working directory.";
+    cmd->needs_auth = true;
     ftp_command_registry(true, cmd);
 }
 

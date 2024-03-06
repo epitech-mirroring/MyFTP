@@ -18,6 +18,7 @@ void register_password_command(void)
     password_command->expected_args_nb = 1;
     password_command->callback = &password_callback;
     password_command->help = "Specify password for authentication";
+    password_command->needs_auth = false;
     ftp_command_registry(true, password_command);
 }
 
