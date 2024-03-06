@@ -116,7 +116,16 @@ void ftp_command_execute(ftp_server_t *server, ftp_client_t *client,
         if (strcmp((*commands)[i]->name, prepared_command->name) == 0) {
             ftp_command_try_execute(server, client, prepared_command,
                 (*commands)[i]);
+            ftp_command_destroy_prepared(prepared_command);
+            return;
         }
     }
     ftp_command_unknown(client);
+    ftp_command_destroy_prepared(prepared_command);
+}
+
+void ftp_command_destroy_prepared(ftp_prepared_command_t *prepared_command)
+{
+    free(prepared_command->args);
+    free(prepared_command);
 }
