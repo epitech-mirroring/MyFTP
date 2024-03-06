@@ -55,7 +55,8 @@ ftp_prepared_command_t *ftp_command_sanitise(ftp_prepared_command_t *prepared)
     }
     for (size_t i = 0; i < strlen(prepared->name); i++) {
         temp = prepared->name[i];
-        prepared->name[i] = (char) (temp == '\n' || temp == '\r' ? '\0' : temp);
+        prepared->name[i] = (char) (temp == '\n'
+            || temp == '\r' ? '\0' : temp);
         prepared->name[i] = (char) tolower(prepared->name[i]);
     }
     return prepared;

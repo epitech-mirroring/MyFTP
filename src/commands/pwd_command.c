@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include "commands/pwd_command.h"
 
-void register_pwd_command()
+void register_pwd_command(void)
 {
     ftp_command_t *cmd = malloc(sizeof(ftp_command_t));
 
