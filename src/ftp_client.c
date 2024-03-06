@@ -9,6 +9,7 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include "ftp_client.h"
 
 ftp_client_t *ftp_client_init(int socket, struct sockaddr_in *csin)
@@ -25,4 +26,9 @@ void ftp_client_destroy(ftp_client_t *client)
 {
     close(client->socket);
     free(client);
+}
+
+void ftp_client_send(ftp_client_t *client, char *message)
+{
+    write(client->socket, message, strlen(message));
 }

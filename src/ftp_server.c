@@ -12,12 +12,16 @@
 #include <unistd.h>
 #include <printf.h>
 #include "ftp_server.h"
-#include "ftp_client_manager.h"
+#include "ftp_command.h"
 
 ftp_server_t *ftp_server_create(int port, char *path)
 {
     ftp_server_t *server = malloc(sizeof(ftp_server_t));
 
+    if (!server) {
+        perror("Can not allocate memory for server");
+        return NULL;
+    }
     server->port = port;
     server->path = path;
     server->nb_clients = 0;
@@ -40,7 +44,7 @@ void ftp_server_destroy(ftp_server_t *server)
     }
     free(server->clients);
     close(server->socket);
-    free(server);
+    ftp_command_destroy_registry();
 }
 
 void ftp_server_stop(ftp_server_t *server)
@@ -49,28 +53,28 @@ void ftp_server_stop(ftp_server_t *server)
     close(server->socket);
 }
 
-void ftp_server_start(ftp_server_t *server)
+bool ftp_server_start(ftp_server_t *server)
 {
     struct sockaddr_in sin = {
             .sin_family = AF_INET,
             .sin_port = htons(server->port),
             .sin_addr.s_addr = INADDR_ANY
     };
-    fd_set readfds;
 
     server->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (setsockopt(server->socket, SOL_SOCKET, SO_REUSEADDR, &(int){1},
-        sizeof(int)) < 0) {
-        perror("Can not re-use socket");
+            sizeof(int)) < 0) {
+        return false;
     }
     server->binded = bind(server->socket, (struct sockaddr*)&sin, sizeof(sin));
-    if (server->binded == -1)
-        return;
+    if (server->binded == -1) {
+        return false;
+    }
     listen(server->socket, 42);
-    server->running = true;
     server->max_socket = server->socket;
     ftp_server_run(server);
     ftp_server_stop(server);
+    return true;
 }
 
 void ftp_server_disconnect_client(ftp_server_t *server, size_t index)
@@ -80,7 +84,16 @@ void ftp_server_disconnect_client(ftp_server_t *server, size_t index)
         server->clients[i] = server->clients[i + 1];
     }
     server->nb_clients--;
-    server->clients = realloc(server->clients,
-                                sizeof(ftp_client_t *) * server->nb_clients);
+    if (server->nb_clients == 0) {
+        free(server->clients);
+        server->clients = NULL;
+    } else {
+        server->clients = realloc(server->clients,
+            sizeof(ftp_client_t *) * server->nb_clients);
+        if (server->clients == NULL) {
+            perror("Can not reallocate memory for clients");
+            return;
+        }
+    }
     ftp_server_update_max_socket(server);
 }

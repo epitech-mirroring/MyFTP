@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <printf.h>
 #include "ftp_client_manager.h"
+#include "ftp_command.h"
 
 void ftp_client_manager_manage_clients(ftp_server_t *server, fd_set *readfds)
 {
@@ -27,7 +28,7 @@ void ftp_client_manager_handle_client(ftp_server_t *server, size_t index)
     if (valread == 0) {
         ftp_server_disconnect_client(server, index);
     } else {
-        printf("Client %s:%d sent: %s\n", server->clients[index]->ip,
-            server->clients[index]->port, buffer);
+        ftp_command_execute(server, server->clients[index],
+            buffer);
     }
 }

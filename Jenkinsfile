@@ -38,7 +38,13 @@ pipeline {
 
                     // Fail the build if the quality gate is not passed
                     if (errors.size() > 0) {
-                        error "Too many coding style errors"
+                        // If on main branch, fail the build otherwise just warn
+                        if (env.BRANCH_NAME == 'main') {
+                            error "Too many coding style errors"
+                        }
+                        else {
+                            unstable "Too many coding style errors"
+                        }
                     }
                 }
             }

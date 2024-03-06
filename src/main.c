@@ -9,6 +9,12 @@
 #include <string.h>
 #include <printf.h>
 #include "ftp_server.h"
+#include "commands/user_command.h"
+
+static void register_commands(void)
+{
+    register_user_command();
+}
 
 int main(int argc, char **argv)
 {
@@ -24,7 +30,11 @@ int main(int argc, char **argv)
         return 0;
     }
     server = ftp_server_create(atoi(argv[1]), argv[2]);
-    ftp_server_start(server);
+    register_commands();
+    if (!ftp_server_start(server)) {
+        ftp_server_destroy(server);
+        return 84;
+    }
     ftp_server_destroy(server);
     return 0;
 }

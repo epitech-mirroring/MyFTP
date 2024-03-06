@@ -27,7 +27,7 @@ ftp_server_t *ftp_server_create(int port, char *path);
 void ftp_server_destroy(ftp_server_t *server);
 
 // ------------------ Methods ------------------
-void ftp_server_start(ftp_server_t *server);
+bool ftp_server_start(ftp_server_t *server);
 void ftp_server_stop(ftp_server_t *server);
 void ftp_server_run(ftp_server_t *server);
 void ftp_server_accept_client(ftp_server_t *server);
