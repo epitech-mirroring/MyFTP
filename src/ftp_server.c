@@ -63,7 +63,7 @@ bool ftp_server_start(ftp_server_t *server)
 
     server->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (setsockopt(server->socket, SOL_SOCKET, SO_REUSEADDR, &(int){1},
-                   sizeof(int)) < 0) {
+            sizeof(int)) < 0) {
         return false;
     }
     server->binded = bind(server->socket, (struct sockaddr*)&sin, sizeof(sin));
@@ -71,7 +71,6 @@ bool ftp_server_start(ftp_server_t *server)
         return false;
     }
     listen(server->socket, 42);
-    server->running = true;
     server->max_socket = server->socket;
     ftp_server_run(server);
     ftp_server_stop(server);

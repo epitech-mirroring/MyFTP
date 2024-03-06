@@ -17,6 +17,7 @@ void ftp_server_run(ftp_server_t *server)
     fd_set readfds = {0};
     struct timeval timeout = {0, 1000};
 
+    server->running = true;
     while (server->running) {
         FD_ZERO(&readfds);
         FD_SET(server->socket, &readfds);
