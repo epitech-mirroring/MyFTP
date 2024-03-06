@@ -15,7 +15,8 @@ void register_password_command(void)
     ftp_command_t *password_command = malloc(sizeof(ftp_command_t));
 
     password_command->name = "pass";
-    password_command->expected_args_nb = 1;
+    password_command->expected_args_nb_min = 1;
+    password_command->expected_args_nb_max = 1;
     password_command->callback = &password_callback;
     password_command->help = "Specify password for authentication";
     password_command->needs_auth = false;

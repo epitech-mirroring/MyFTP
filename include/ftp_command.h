@@ -22,7 +22,8 @@ typedef struct ftp_prepared_command_s {
 typedef struct ftp_command_s {
     char *name;
     ftp_command_callback_t callback;
-    size_t expected_args_nb;
+    size_t expected_args_nb_min;
+    size_t expected_args_nb_max;
     char *help;
     bool needs_auth;
 } ftp_command_t;
