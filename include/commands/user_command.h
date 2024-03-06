@@ -9,5 +9,5 @@
 #pragma once
 #include "ftp_command.h"
 
-void register_user_command();
+void register_user_command(void);
 void user_callback(ftp_server_t *server, ftp_client_t *client, char **args);
