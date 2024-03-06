@@ -13,6 +13,7 @@ SOURCES			= src/main.c								\
 				  src/ftp_client.c							\
 				  src/ftp_client_manager.c					\
 				  src/ftp_command.c							\
+				  src/ftp_command_preparation.c				\
 				  src/commands/user_command.c				\
 				  src/commands/password_command.c			\
 

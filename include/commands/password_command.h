@@ -10,4 +10,5 @@
 #include "ftp_command.h"
 
 void register_password_command(void);
-void password_callback(ftp_server_t *server, ftp_client_t *client, char **args);
+void password_callback(ftp_server_t *server, ftp_client_t *client,
+    char **args);

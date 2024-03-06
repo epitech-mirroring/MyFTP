@@ -32,7 +32,6 @@ void password_callback(ftp_server_t *server, ftp_client_t *client, char **args)
         ftp_client_send(client, "332 Need account for login.\r\n");
         return;
     }
-    fprintf(stderr, "Password '%s' for user '%s'\n", args[0], client->username);
     if (strcmp(client->username, "Anonymous") == 0 && strlen(args[0]) == 0) {
         ftp_client_send(client, "230 User logged in, proceed.\r\n");
         client->is_authenticated = true;
