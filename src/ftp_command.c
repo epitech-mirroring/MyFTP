@@ -68,7 +68,7 @@ ftp_prepared_command_t *ftp_command_prepare(char *command)
             break;
         }
     }
-    return prepared_command;
+    return ftp_command_sanitise(prepared_command);
 }
 
 static void ftp_command_not_implemented(ftp_client_t *client)
@@ -124,4 +124,18 @@ void ftp_command_destroy_prepared(ftp_prepared_command_t *prepared_command)
 {
     free(prepared_command->args);
     free(prepared_command);
+}
+
+ftp_prepared_command_t *ftp_command_sanitise(ftp_prepared_command_t *prepared)
+{
+    char temp;
+
+    for (size_t i = 0; i < prepared->args_nb; i++) {
+        for (size_t j = 0; j < strlen(prepared->args[i]); j++) {
+            temp = prepared->args[i][j];
+            prepared->args[i][j] = (char) (temp == '\n' || temp == '\r' ?
+                '\0' : temp);
+        }
+    }
+    return prepared;
 }
