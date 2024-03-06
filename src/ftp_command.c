@@ -10,6 +10,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "ftp_command.h"
+#include "ftp.h"
 
 ftp_command_t ***ftp_command_registry(bool write, void *data)
 {
@@ -27,6 +28,13 @@ ftp_command_t ***ftp_command_registry(bool write, void *data)
         commands[commands_nb - 1] = data;
         commands[commands_nb] = NULL;
         return NULL;
+    }
+    if (commands == NULL) {
+        commands = malloc(sizeof(ftp_command_t *) * 1);
+        if (commands == NULL) {
+            returnWithError("Cannot allocate memory for the command registry\n", NULL);
+        }
+        commands[0] = NULL;
     }
     return &commands;
 }
@@ -55,6 +63,8 @@ ftp_prepared_command_t *ftp_command_prepare(char *command)
     prepared_command->name = strtok(command, " ");
     for (size_t i = 0; i < strlen(prepared_command->name); i++)
         prepared_command->name[i] = (char)tolower(prepared_command->name[i]);
+    prepared_command->args_nb = 0;
+    prepared_command->args = malloc(sizeof(char *) * 10);
     for (size_t i = 0; i < 10; i++) {
         prepared_command->args[i] = strtok(NULL, " ");
         if (prepared_command->args[i] == NULL) {

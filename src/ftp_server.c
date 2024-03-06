@@ -85,10 +85,15 @@ void ftp_server_disconnect_client(ftp_server_t *server, size_t index)
         server->clients[i] = server->clients[i + 1];
     }
     server->nb_clients--;
-    server->clients = realloc(server->clients,
-                                sizeof(ftp_client_t *) * server->nb_clients);
-    if (server->clients == NULL) {
-        returnWithError("Can not reallocate memory for clients",)
+    if (server->nb_clients == 0) {
+        free(server->clients);
+        server->clients = NULL;
+    } else {
+        server->clients = realloc(server->clients,
+                                  sizeof(ftp_client_t *) * server->nb_clients);
+        if (server->clients == NULL) {
+            returnWithError("Can not reallocate memory for clients",)
+        }
     }
     ftp_server_update_max_socket(server);
 }
