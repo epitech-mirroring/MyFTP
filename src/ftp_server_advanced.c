@@ -55,3 +55,12 @@ void ftp_server_accept_client(ftp_server_t *server)
     if (client_socket > server->max_socket)
         server->max_socket = client_socket;
 }
+
+size_t ftp_server_get_client_index(ftp_server_t *server, ftp_client_t *client)
+{
+    for (size_t i = 0; i < server->nb_clients; i++) {
+        if (server->clients[i] == client)
+            return i;
+    }
+    return -1;
+}
