@@ -47,30 +47,6 @@ void ftp_command_destroy_registry(void)
     free(*commands);
 }
 
-ftp_prepared_command_t *ftp_command_prepare(char *command)
-{
-    ftp_prepared_command_t *prepared_command = malloc(sizeof(
-        ftp_prepared_command_t));
-
-    if (prepared_command == NULL) {
-        perror("Cannot allocate memory for the prepared command\n");
-        return NULL;
-    }
-    prepared_command->name = strtok(command, " ");
-    for (size_t i = 0; i < strlen(prepared_command->name); i++)
-        prepared_command->name[i] = (char)tolower(prepared_command->name[i]);
-    prepared_command->args_nb = 0;
-    prepared_command->args = malloc(sizeof(char *) * 10);
-    for (size_t i = 0; i < 10; i++) {
-        prepared_command->args[i] = strtok(NULL, " ");
-        if (prepared_command->args[i] == NULL) {
-            prepared_command->args_nb = i;
-            break;
-        }
-    }
-    return prepared_command;
-}
-
 static void ftp_command_not_implemented(ftp_client_t *client)
 {
     dprintf(client->socket, "502 Command not implemented.\r\n");
@@ -118,10 +94,4 @@ void ftp_command_execute(ftp_server_t *server, ftp_client_t *client,
     }
     ftp_command_unknown(client);
     ftp_command_destroy_prepared(prepared_command);
-}
-
-void ftp_command_destroy_prepared(ftp_prepared_command_t *prepared_command)
-{
-    free(prepared_command->args);
-    free(prepared_command);
 }

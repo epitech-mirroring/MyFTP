@@ -33,3 +33,4 @@ ftp_command_t ***ftp_command_registry(bool write, void *data);
 ftp_prepared_command_t *ftp_command_prepare(char *command);
 void ftp_command_destroy_registry(void);
 void ftp_command_destroy_prepared(ftp_prepared_command_t *prepared_command);
+ftp_prepared_command_t *ftp_command_sanitise(ftp_prepared_command_t *prepared);

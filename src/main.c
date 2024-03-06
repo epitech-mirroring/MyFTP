@@ -10,10 +10,12 @@
 #include <printf.h>
 #include "ftp_server.h"
 #include "commands/user_command.h"
+#include "commands/password_command.h"
 
 static void register_commands(void)
 {
     register_user_command();
+    register_password_command();
 }
 
 int main(int argc, char **argv)
