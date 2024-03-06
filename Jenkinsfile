@@ -43,8 +43,7 @@ pipeline {
                             error "Too many coding style errors"
                         }
                         else {
-                            currentBuild.result = 'UNSTABLE'
-                            warn "Too many coding style errors"
+                            unstable "Too many coding style errors"
                         }
                     }
                 }
