@@ -30,10 +30,6 @@ ftp_command_t ***ftp_command_registry(bool write, void *data)
     }
     if (commands == NULL) {
         commands = malloc(sizeof(ftp_command_t *) * 1);
-        if (commands == NULL) {
-            perror("Cannot allocate memory for the command registry\n");
-            return NULL;
-        }
         commands[0] = NULL;
     }
     return &commands;

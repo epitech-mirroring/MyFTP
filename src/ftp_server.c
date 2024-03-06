@@ -63,13 +63,11 @@ bool ftp_server_start(ftp_server_t *server)
 
     server->socket = socket(AF_INET, SOCK_STREAM, 0);
     if (setsockopt(server->socket, SOL_SOCKET, SO_REUSEADDR, &(int){1},
-        sizeof(int)) < 0) {
-        perror("Can not reuse socket");
+                   sizeof(int)) < 0) {
         return false;
     }
     server->binded = bind(server->socket, (struct sockaddr*)&sin, sizeof(sin));
     if (server->binded == -1) {
-        perror("Can not bind the socket");
         return false;
     }
     listen(server->socket, 42);
@@ -92,7 +90,7 @@ void ftp_server_disconnect_client(ftp_server_t *server, size_t index)
         server->clients = NULL;
     } else {
         server->clients = realloc(server->clients,
-                                  sizeof(ftp_client_t *) * server->nb_clients);
+            sizeof(ftp_client_t *) * server->nb_clients);
         if (server->clients == NULL) {
             perror("Can not reallocate memory for clients");
             return;

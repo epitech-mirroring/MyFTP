@@ -12,6 +12,7 @@
 void register_user_command(void)
 {
     ftp_command_t *user_command = malloc(sizeof(ftp_command_t));
+
     user_command->name = "user";
     user_command->expected_args_nb = 1;
     user_command->callback = &user_callback;
