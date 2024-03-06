@@ -32,3 +32,4 @@ void ftp_server_stop(ftp_server_t *server);
 void ftp_server_run(ftp_server_t *server);
 void ftp_server_accept_client(ftp_server_t *server);
 void ftp_server_disconnect_client(ftp_server_t *server, size_t index);
+size_t ftp_server_get_client_index(ftp_server_t *server, ftp_client_t *client);
