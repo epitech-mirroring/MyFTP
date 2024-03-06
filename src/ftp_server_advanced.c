@@ -50,7 +50,7 @@ void ftp_server_accept_client(ftp_server_t *server)
     if (server->clients == NULL)
         return;
     server->clients[server->nb_clients - 1] =
-            ftp_client_init(client_socket, &csin);
+            ftp_client_init(client_socket, &csin, server);
     write(client_socket, "220 Service ready for new user.\r\n", 33);
     if (client_socket > server->max_socket)
         server->max_socket = client_socket;
