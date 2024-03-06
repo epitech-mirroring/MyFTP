@@ -20,6 +20,7 @@ SOURCES			= src/main.c								\
 				  src/commands/quit_command.c				\
 				  src/commands/cwd_command.c				\
 				  src/commands/pwd_command.c				\
+				  src/commands/cdup_command.c				\
 
 TESTS			=
 
