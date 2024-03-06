@@ -38,15 +38,15 @@ bool is_subdir(const char *parent_dir, const char *sub_dir)
     return result;
 }
 
-static char *get_final_path(char *path, char *server_path)
+static char *get_final_path(char *path, char *actual_path)
 {
     char *final_path = NULL;
 
     if (strchr(path, '/') == 0) {
         final_path = strdup(path);
     } else {
-        final_path = malloc(strlen(server_path) + strlen(path) + 2);
-        strcpy(final_path, server_path);
+        final_path = malloc(strlen(actual_path) + strlen(path) + 2);
+        strcpy(final_path, actual_path);
         strcat(final_path, "/");
         strcat(final_path, path);
     }
@@ -67,11 +67,11 @@ void cwd_callback(ftp_server_t *server, ftp_client_t *client, char **args)
         closedir(client->working_dir);
         client->working_dir = dir;
         free(client->wd_path);
-        client->wd_path = final_path;
+        client->wd_path = realpath(final_path, NULL);
         ftp_client_send(client, "250 Directory successfully changed.\r\n");
     } else {
         closedir(dir);
         free(final_path);
-        ftp_client_send(client, "550 Failed to change directory.\r\n");
+        ftp_client_send(client, "550 Can't change directory above root.\r\n");
     }
 }
