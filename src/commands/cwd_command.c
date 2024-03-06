@@ -72,6 +72,6 @@ void cwd_callback(ftp_server_t *server, ftp_client_t *client, char **args)
     } else {
         closedir(dir);
         free(final_path);
-        ftp_client_send(client, "550 Failed to change directory.\r\n");
+        ftp_client_send(client, "550 Can't change directory above root.\r\n");
     }
 }
