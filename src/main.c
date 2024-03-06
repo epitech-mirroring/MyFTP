@@ -15,6 +15,7 @@
 #include "commands/cwd_command.h"
 #include "commands/pwd_command.h"
 #include "commands/cdup_command.h"
+#include "commands/delete_command.h"
 
 static void register_commands(void)
 {
@@ -24,6 +25,7 @@ static void register_commands(void)
     register_cwd_command();
     register_pwd_command();
     register_cdup_command();
+    register_delete_command();
 }
 
 int main(int argc, char **argv)
