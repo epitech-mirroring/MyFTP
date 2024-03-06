@@ -44,7 +44,7 @@ pipeline {
                         }
                         else {
                             currentBuild.result = 'UNSTABLE'
-                            echo "Too many coding style errors"
+                            warn "Too many coding style errors"
                         }
                     }
                 }
