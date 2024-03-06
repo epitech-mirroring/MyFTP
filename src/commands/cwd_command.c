@@ -17,6 +17,7 @@ void register_cwd_command(void)
     cwd_command->expected_args_nb = 1;
     cwd_command->callback = &cwd_callback;
     cwd_command->help = "Change working directory";
+    cwd_command->needs_auth = true;
     ftp_command_registry(true, cwd_command);
 }
 

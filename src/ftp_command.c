@@ -62,11 +62,20 @@ static void ftp_command_invalid_args(ftp_client_t *client)
     dprintf(client->socket, "501 Invalid number of arguments.\r\n");
 }
 
+static void ftp_command_not_logged(ftp_client_t *client)
+{
+    dprintf(client->socket, "530 Not logged in.\r\n");
+}
+
 static void ftp_command_try_execute(ftp_server_t *server, ftp_client_t *client,
     ftp_prepared_command_t *prepared_command, ftp_command_t *command)
 {
     if (command->expected_args_nb != prepared_command->args_nb) {
         ftp_command_invalid_args(client);
+        return;
+    }
+    if (command->needs_auth && !client->is_authenticated) {
+        ftp_command_not_logged(client);
         return;
     }
     if (command->callback == NULL) {
