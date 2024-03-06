@@ -7,9 +7,11 @@
 */
 
 #pragma once
+typedef struct ftp_client_s ftp_client_t;
 #include <stdbool.h>
 #include <stdlib.h>
 #include "ftp_client.h"
+#include <dirent.h>
 
 typedef struct ftp_server_s {
     int socket;
@@ -20,6 +22,7 @@ typedef struct ftp_server_s {
     ftp_client_t **clients;
     bool running;
     int max_socket;
+    DIR *server_dir;
 } ftp_server_t;
 
 // ------------------ Constructors / Destructors ------------------

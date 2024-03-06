@@ -26,6 +26,12 @@ ftp_server_t *ftp_server_create(int port, char *path)
     server->path = path;
     server->nb_clients = 0;
     server->clients = NULL;
+    server->server_dir = opendir(path);
+    if (!server->server_dir) {
+        perror("Can not open server directory");
+        ftp_server_destroy(server);
+        return NULL;
+    }
     return server;
 }
 

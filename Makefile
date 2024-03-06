@@ -17,6 +17,7 @@ SOURCES			= src/main.c								\
 				  src/commands/user_command.c				\
 				  src/commands/password_command.c			\
 				  src/commands/quit_command.c				\
+				  src/commands/cwd_command.c				\
 
 TESTS			=
 

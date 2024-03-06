@@ -12,19 +12,26 @@
 #include <string.h>
 #include "ftp_client.h"
 
-ftp_client_t *ftp_client_init(int socket, struct sockaddr_in *csin)
+ftp_client_t *ftp_client_init(int socket, struct sockaddr_in *csin,
+    ftp_server_t *server)
 {
     ftp_client_t *client = malloc(sizeof(ftp_client_t));
 
     client->socket = socket;
     client->ip = inet_ntoa(csin->sin_addr);
     client->port = ntohs(csin->sin_port);
+    client->is_authenticated = false;
+    client->username = NULL;
+    client->working_dir = opendir(server->path);
+    client->wd_path = strdup(server->path);
     return client;
 }
 
 void ftp_client_destroy(ftp_client_t *client)
 {
     close(client->socket);
+    closedir(client->working_dir);
+    free(client->wd_path);
     free(client);
 }
 
