@@ -13,6 +13,7 @@
 #include "commands/password_command.h"
 #include "commands/quit_command.h"
 #include "commands/cwd_command.h"
+#include "commands/pwd_command.h"
 
 static void register_commands(void)
 {
@@ -20,6 +21,7 @@ static void register_commands(void)
     register_password_command();
     register_quit_command();
     register_cwd_command();
+    register_pwd_command();
 }
 
 int main(int argc, char **argv)
