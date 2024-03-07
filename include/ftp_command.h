@@ -26,6 +26,7 @@ typedef struct ftp_command_s {
     size_t expected_args_nb_max;
     char *help;
     bool needs_auth;
+    bool needs_mode_selected;
 } ftp_command_t;
 
 // ------------------ Methods ------------------

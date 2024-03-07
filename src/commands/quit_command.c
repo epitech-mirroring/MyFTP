@@ -18,6 +18,7 @@ void register_quit_command(void)
     quit_command->callback = &quit_callback;
     quit_command->help = "Close the connection to the server";
     quit_command->needs_auth = false;
+    quit_command->needs_mode_selected = false;
     ftp_command_registry(true, quit_command);
 }
 

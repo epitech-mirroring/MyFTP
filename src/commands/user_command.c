@@ -19,6 +19,7 @@ void register_user_command(void)
     user_command->callback = &user_callback;
     user_command->help = "Specify user for authentication";
     user_command->needs_auth = false;
+    user_command->needs_mode_selected = false;
     ftp_command_registry(true, user_command);
 }
 
