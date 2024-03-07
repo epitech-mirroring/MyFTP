@@ -7,7 +7,8 @@
 */
 
 #include <string.h>
-#include <sys/stat.h>
+#include <stdio.h>
+#include <unistd.h>
 #include "commands/list_command.h"
 
 void register_list_command(void)
@@ -25,7 +26,8 @@ void register_list_command(void)
 
 static char *concat_path(char *path, char *string)
 {
-    char *new_path = malloc((strlen(path) + strlen(string) + 2) * sizeof(char));
+    char *new_path = malloc((strlen(path) +
+        strlen(string) + 2) * sizeof(char));
     char *re;
 
     strcpy(new_path, path);
@@ -39,25 +41,30 @@ static char *concat_path(char *path, char *string)
 void list_callback(ftp_server_t *server, ftp_client_t *client, char **args)
 {
     char *path;
-    struct stat path_stat;
-    struct dirent *dir;
-    DIR *dirp;
+    char *command;
+    FILE *ret;
+    int buffer[1];
 
     if (args[0] != NULL) {
         path = concat_path(client->wd_path, args[0]);
     } else {
         path = realpath(client->wd_path, NULL);
     }
-    stat(path, &path_stat);
-    if (S_ISDIR(path_stat.st_mode)) {
-        dirp = opendir(path);
-        while ((dir = readdir(dirp)) != NULL) {
-            ftp_client_send(client, dir->d_name);
-            ftp_client_send(client, "\r\n");
-        }
-        ftp_client_send(client, "226 Transfer complete.\r\n");
-        closedir(dirp);
-    } else {
-        ftp_client_send(client, "550 Failed to open directory.\r\n");
+    command = malloc((strlen("ls -l ") + strlen(path) + 1) * sizeof(char));
+    strcpy(command, "ls -l ");
+    strcat(command, path);
+    ret = popen(command, "r");
+    if (ret == NULL) {
+        dprintf(client->socket, "550 Failed to list directory.\r\n");
+        free(path);
+        free(command);
+        return;
     }
+    while (read(fileno(ret), &buffer, 1) > 0) {
+        dprintf(client->socket, "%c", buffer[0]);
+    }
+    pclose(ret);
+    ftp_client_send(client, "226 Directory send OK.\r\n");
+    free(path);
+    free(command);
 }
