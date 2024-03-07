@@ -21,6 +21,7 @@ void register_list_command(void)
     list_command->callback = &list_callback;
     list_command->help = "List files in the current directory";
     list_command->needs_auth = true;
+    list_command->needs_mode_selected = true;
     ftp_command_registry(true, list_command);
 }
 
@@ -40,16 +41,14 @@ static char *concat_path(char *path, char *string)
 
 void list_callback(ftp_server_t *server, ftp_client_t *client, char **args)
 {
-    char *path;
+    char *path = args[0] != NULL ? concat_path(client->wd_path, args[0]) :
+        realpath(client->wd_path, NULL);
     char *command;
     FILE *ret;
     int buffer[1];
+    int data_socket;
 
-    if (args[0] != NULL) {
-        path = concat_path(client->wd_path, args[0]);
-    } else {
-        path = realpath(client->wd_path, NULL);
-    }
+    (void)server;
     command = malloc((strlen("ls -l ") + strlen(path) + 1) * sizeof(char));
     strcpy(command, "ls -l ");
     strcat(command, path);
@@ -60,8 +59,18 @@ void list_callback(ftp_server_t *server, ftp_client_t *client, char **args)
         free(command);
         return;
     }
-    while (read(fileno(ret), &buffer, 1) > 0) {
-        dprintf(client->socket, "%c", buffer[0]);
+    dprintf(client->socket, "150 Here comes the directory listing.\r\n");
+    if (fork() == 0) {
+        data_socket = ftp_client_get_data_socket(client);
+        if (data_socket == -1) {
+            dprintf(client->socket, "425 Can not open data connection.\r\n");
+            exit(0);
+        }
+        while (fread(buffer, 1, 1, ret) > 0) {
+            write(data_socket, buffer, 1);
+        }
+        close(data_socket);
+        exit(0);
     }
     pclose(ret);
     ftp_client_send(client, "226 Directory send OK.\r\n");
