@@ -10,6 +10,7 @@
 typedef struct ftp_server_s ftp_server_t;
 #include <stdbool.h>
 #include <dirent.h>
+#include <netinet/in.h>
 #include "ftp_server.h"
 
 typedef enum ftp_client_mod_e {
