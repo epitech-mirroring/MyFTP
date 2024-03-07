@@ -50,6 +50,7 @@ int ftp_client_get_data_socket(ftp_client_t *client)
     struct sockaddr_in csin;
     socklen_t size = sizeof(csin);
     int s;
+    int r;
 
     if (client->mode == PASSIVE) {
         return accept(client->data_socket, (struct sockaddr*)&csin, &size);
@@ -58,11 +59,8 @@ int ftp_client_get_data_socket(ftp_client_t *client)
         csin.sin_family = AF_INET;
         csin.sin_addr.s_addr = inet_addr(client->ip);
         csin.sin_port = htons(client->client_data_port);
-        if (connect(s, (struct sockaddr *)&csin, sizeof(csin)) == -1) {
-            perror("Connect failed");
-            return -1;
-        }
-        return s;
+        r = connect(s, (struct sockaddr*)&csin, size);
+        return r == -1 ? -1 : s;
     }
     return -1;
 }

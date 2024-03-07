@@ -39,14 +39,34 @@ static char *concat_path(char *path, char *string)
     return re;
 }
 
+static void handle_ls(ftp_client_t *client, FILE *command_out)
+{
+    int buffer[1];
+    int data_socket;
+
+    dprintf(client->socket, "150 Here comes the directory listing.\r\n");
+    if (fork() == 0) {
+        data_socket = ftp_client_get_data_socket(client);
+        if (data_socket == -1) {
+            dprintf(client->socket, "425 Can not open data connection.\r\n");
+            exit(0);
+        }
+        while (fread(buffer, 1, 1, command_out) > 0) {
+            write(data_socket, buffer, 1);
+        }
+        close(data_socket);
+        exit(0);
+    }
+    pclose(command_out);
+    ftp_client_send(client, "226 Directory send OK.\r\n");
+}
+
 void list_callback(ftp_server_t *server, ftp_client_t *client, char **args)
 {
     char *path = args[0] != NULL ? concat_path(client->wd_path, args[0]) :
         realpath(client->wd_path, NULL);
     char *command;
     FILE *ret;
-    int buffer[1];
-    int data_socket;
 
     (void)server;
     command = malloc((strlen("ls -l ") + strlen(path) + 1) * sizeof(char));
@@ -59,21 +79,7 @@ void list_callback(ftp_server_t *server, ftp_client_t *client, char **args)
         free(command);
         return;
     }
-    dprintf(client->socket, "150 Here comes the directory listing.\r\n");
-    if (fork() == 0) {
-        data_socket = ftp_client_get_data_socket(client);
-        if (data_socket == -1) {
-            dprintf(client->socket, "425 Can not open data connection.\r\n");
-            exit(0);
-        }
-        while (fread(buffer, 1, 1, ret) > 0) {
-            write(data_socket, buffer, 1);
-        }
-        close(data_socket);
-        exit(0);
-    }
-    pclose(ret);
-    ftp_client_send(client, "226 Directory send OK.\r\n");
+    handle_ls(client, ret);
     free(path);
     free(command);
 }

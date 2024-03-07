@@ -54,8 +54,6 @@ void pasv_callback(ftp_server_t *server, ftp_client_t *client, char **args)
     socklen_t len2 = sizeof(sin);
     in_addr_t ip;
 
-    (void)args;
-    (void)server;
     if (!create_data_channel(client)) {
         ftp_client_send(client, "425 Can not open data connection.\r\n");
         return;
