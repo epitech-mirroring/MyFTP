@@ -84,7 +84,7 @@ static void ftp_command_try_execute(ftp_server_t *server, ftp_client_t *client,
         ftp_command_not_logged(client);
         return;
     }
-    if (command->needs_mode_selected && client->mode != UNDEFINED) {
+    if (command->needs_mode_selected && client->mode == UNDEFINED) {
         ftp_command_need_mode(client);
         return;
     }

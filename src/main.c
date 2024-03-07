@@ -17,6 +17,7 @@
 #include "commands/cdup_command.h"
 #include "commands/delete_command.h"
 #include "commands/pasv_command.h"
+#include "commands/list_command.h"
 
 static void register_commands(void)
 {
@@ -28,6 +29,7 @@ static void register_commands(void)
     register_cdup_command();
     register_delete_command();
     register_pasv_command();
+    register_list_command();
 }
 
 int main(int argc, char **argv)
