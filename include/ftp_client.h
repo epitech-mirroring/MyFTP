@@ -30,6 +30,7 @@ typedef struct ftp_client_s {
     int data_socket;
     struct sockaddr_in data_addr;
     ftp_client_mod_t mode;
+    int client_data_port;
 } ftp_client_t;
 
 // ------------------ Constructors / Destructors ------------------
@@ -39,3 +40,4 @@ void ftp_client_destroy(ftp_client_t *client);
 
 // ------------------ Methods ------------------
 void ftp_client_send(ftp_client_t *client, char *message);
+int ftp_client_get_data_socket(ftp_client_t *client);
