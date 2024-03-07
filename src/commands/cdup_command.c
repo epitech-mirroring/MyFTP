@@ -15,10 +15,12 @@ void register_cdup_command(void)
     ftp_command_t *cdup_command = malloc(sizeof(ftp_command_t));
 
     cdup_command->name = "cdup";
-    cdup_command->expected_args_nb = 0;
+    cdup_command->expected_args_nb_min = 0;
+    cdup_command->expected_args_nb_max = 0;
     cdup_command->callback = &cdup_callback;
     cdup_command->help = "Change to the parent directory";
     cdup_command->needs_auth = true;
+    cdup_command->needs_mode_selected = false;
     ftp_command_registry(true, cdup_command);
 }
 

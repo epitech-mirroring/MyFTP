@@ -16,10 +16,12 @@ void register_delete_command(void)
     ftp_command_t *delete_command = malloc(sizeof(ftp_command_t));
 
     delete_command->name = "dele";
-    delete_command->expected_args_nb = 1;
+    delete_command->expected_args_nb_min = 1;
+    delete_command->expected_args_nb_max = 1;
     delete_command->callback = &delete_callback;
     delete_command->help = "Delete a file";
     delete_command->needs_auth = true;
+    delete_command->needs_mode_selected = false;
     ftp_command_registry(true, delete_command);
 }
 

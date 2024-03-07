@@ -14,10 +14,12 @@ void register_cwd_command(void)
     ftp_command_t *cwd_command = malloc(sizeof(ftp_command_t));
 
     cwd_command->name = "cwd";
-    cwd_command->expected_args_nb = 1;
+    cwd_command->expected_args_nb_min = 1;
+    cwd_command->expected_args_nb_max = 1;
     cwd_command->callback = &cwd_callback;
     cwd_command->help = "Change working directory";
     cwd_command->needs_auth = true;
+    cwd_command->needs_mode_selected = false;
     ftp_command_registry(true, cwd_command);
 }
 

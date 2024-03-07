@@ -67,15 +67,25 @@ static void ftp_command_not_logged(ftp_client_t *client)
     dprintf(client->socket, "530 Not logged in.\r\n");
 }
 
+static void ftp_command_need_mode(ftp_client_t *client)
+{
+    dprintf(client->socket, "425 Use PASV or PORT first.\r\n");
+}
+
 static void ftp_command_try_execute(ftp_server_t *server, ftp_client_t *client,
     ftp_prepared_command_t *prepared_command, ftp_command_t *command)
 {
-    if (command->expected_args_nb != prepared_command->args_nb) {
+    if (command->expected_args_nb_min > prepared_command->args_nb ||
+        command->expected_args_nb_max < prepared_command->args_nb) {
         ftp_command_invalid_args(client);
         return;
     }
     if (command->needs_auth && !client->is_authenticated) {
         ftp_command_not_logged(client);
+        return;
+    }
+    if (command->needs_mode_selected && client->mode != UNDEFINED) {
+        ftp_command_need_mode(client);
         return;
     }
     if (command->callback == NULL) {
