@@ -21,6 +21,7 @@ void register_delete_command(void)
     delete_command->callback = &delete_callback;
     delete_command->help = "Delete a file";
     delete_command->needs_auth = true;
+    delete_command->needs_mode_selected = false;
     ftp_command_registry(true, delete_command);
 }
 

@@ -20,6 +20,7 @@ void register_pwd_command(void)
     cmd->expected_args_nb_max = 0;
     cmd->help = "Print working directory.";
     cmd->needs_auth = true;
+    cmd->needs_mode_selected = false;
     ftp_command_registry(true, cmd);
 }
 

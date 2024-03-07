@@ -20,6 +20,7 @@ void register_cdup_command(void)
     cdup_command->callback = &cdup_callback;
     cdup_command->help = "Change to the parent directory";
     cdup_command->needs_auth = true;
+    cdup_command->needs_mode_selected = false;
     ftp_command_registry(true, cdup_command);
 }
 

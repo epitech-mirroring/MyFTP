@@ -12,6 +12,12 @@ typedef struct ftp_server_s ftp_server_t;
 #include <dirent.h>
 #include "ftp_server.h"
 
+typedef enum ftp_client_mod_e {
+    ACTIVE,
+    PASSIVE,
+    UNDEFINED
+} ftp_client_mod_t;
+
 typedef struct ftp_client_s {
     int socket;
     char *ip;
@@ -20,6 +26,9 @@ typedef struct ftp_client_s {
     char *username;
     DIR *working_dir;
     char *wd_path;
+    int data_socket;
+    struct sockaddr_in data_addr;
+    ftp_client_mod_t mode;
 } ftp_client_t;
 
 // ------------------ Constructors / Destructors ------------------

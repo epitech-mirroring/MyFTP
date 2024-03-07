@@ -24,6 +24,9 @@ ftp_client_t *ftp_client_init(int socket, struct sockaddr_in *csin,
     client->username = NULL;
     client->working_dir = opendir(server->path);
     client->wd_path = strdup(server->path);
+    client->mode = UNDEFINED;
+    client->data_socket = -1;
+    client->data_addr = (struct sockaddr_in){0};
     return client;
 }
 
