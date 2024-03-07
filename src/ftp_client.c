@@ -19,7 +19,7 @@ ftp_client_t *ftp_client_init(int socket, struct sockaddr_in *csin,
     ftp_client_t *client = malloc(sizeof(ftp_client_t));
 
     client->socket = socket;
-    client->ip = inet_ntoa(csin->sin_addr);
+    client->ip = csin->sin_addr;
     client->port = ntohs(csin->sin_port);
     client->is_authenticated = false;
     client->username = NULL;
@@ -57,7 +57,7 @@ int ftp_client_get_data_socket(ftp_client_t *client)
     } else if (client->mode == ACTIVE) {
         s = socket(AF_INET, SOCK_STREAM, 0);
         csin.sin_family = AF_INET;
-        csin.sin_addr.s_addr = inet_addr(client->ip);
+        csin.sin_addr.s_addr = client->ip.s_addr;
         csin.sin_port = htons(client->client_data_port);
         r = connect(s, (struct sockaddr*)&csin, size);
         return r == -1 ? -1 : s;
