@@ -19,6 +19,7 @@
 #include "commands/pasv_command.h"
 #include "commands/list_command.h"
 #include "commands/port_command.h"
+#include "commands/retrieve_command.h"
 
 static void register_commands(void)
 {
@@ -32,6 +33,7 @@ static void register_commands(void)
     register_pasv_command();
     register_list_command();
     register_port_command();
+    register_retrieve_command();
 }
 
 int main(int argc, char **argv)
