@@ -50,7 +50,7 @@ static bool check_args(char *arg_1, char *arg_2)
     for (int i = 0; arg_1[i] != '\0'; i++)
         if (arg_1[i] < '0' || arg_1[i] > '9')
             return false;
-    if (atoi(arg_1) < 1024 || atoi(arg_1) > 65535)
+    if (atoi(arg_1) == 0 || atoi(arg_1) > 65535)
         return false;
     if (access(arg_2, F_OK) == -1)
         return false;
@@ -64,6 +64,7 @@ static bool check_args(char *arg_1, char *arg_2)
 int main(int argc, char **argv)
 {
     ftp_server_t *server;
+    int r = 0;
 
     if (argc != 3 ||
         (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)) {
@@ -78,10 +79,7 @@ int main(int argc, char **argv)
         return 84;
     server = ftp_server_create(atoi(argv[1]), argv[2]);
     register_commands();
-    if (!ftp_server_start(server)) {
-        ftp_server_destroy(server);
-        return 84;
-    }
+    r = !ftp_server_start(server) ? 84 : 0;
     ftp_server_destroy(server);
-    return 0;
+    return r;
 }
