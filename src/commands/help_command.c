@@ -30,20 +30,20 @@ void help_callback(ftp_server_t *server, ftp_client_t *client, char **args)
     ftp_command_t ***commands = ftp_command_registry(false, NULL);
 
     if (args[0] == NULL) {
-        ftp_client_send(client, "214-The following commands"
+        ftp_client_send(client, "214-The following commands "
             "are recognized.\r\n");
-        for (int i = 0; commands[i] != NULL; i++)
-            dprintf(client->socket, " %s\r\n", commands[i][0]->name);
+        for (int i = 0; (*commands)[i] != NULL; i++)
+            dprintf(client->socket, " %s\r\n", (*commands)[i]->name);
         ftp_client_send(client, "214 Help OK.\r\n");
         return;
     }
-    for (int i = 0; commands[i] != NULL; i++)
-        if (strcmp(commands[i][0]->name, args[0]) == 0) {
+    for (int i = 0; (*commands)[i] != NULL; i++)
+        if (strcmp((*commands)[i]->name, args[0]) == 0) {
             dprintf(client->socket, "214 %s\r\n",
-                commands[i][0]->help);
+                (*commands)[i]->help);
             dprintf(client->socket, "214 Help OK.\r\n");
             return;
         }
-    ftp_client_send(client, "504 Command not implemented"
+    ftp_client_send(client, "504 Command not implemented "
         "for that parameter.\r\n");
 }
