@@ -25,6 +25,7 @@ SOURCES			= src/main.c								\
 				  src/commands/pasv_command.c				\
 				  src/commands/list_command.c				\
 				  src/commands/port_command.c				\
+				  src/commands/store_command.c				\
 
 TESTS			=
 
