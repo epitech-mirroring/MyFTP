@@ -45,8 +45,12 @@ ftp_prepared_command_t *ftp_command_prepare(char *command)
 ftp_prepared_command_t *ftp_command_sanitise(ftp_prepared_command_t *prepared)
 {
     char temp;
+    int final_count = 0;
 
     for (size_t i = 0; i < prepared->args_nb; i++) {
+        if (prepared->args[i] == NULL ||
+            !is_word(prepared->args[i], ' ', &final_count))
+            continue;
         for (size_t j = 0; j < strlen(prepared->args[i]); j++) {
             temp = prepared->args[i][j];
             prepared->args[i][j] = (char) (temp == '\n' || temp == '\r' ?
@@ -55,9 +59,9 @@ ftp_prepared_command_t *ftp_command_sanitise(ftp_prepared_command_t *prepared)
     }
     for (size_t i = 0; i < strlen(prepared->name); i++) {
         temp = prepared->name[i];
-        prepared->name[i] = (char) (temp == '\n'
-            || temp == '\r' ? '\0' : temp);
+        prepared->name[i] = (char)(temp == '\n' || temp == '\r' ? '\0' : temp);
         prepared->name[i] = (char) tolower(prepared->name[i]);
     }
+    prepared->args_nb = final_count;
     return prepared;
 }
