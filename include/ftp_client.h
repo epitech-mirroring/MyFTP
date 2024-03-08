@@ -21,7 +21,7 @@ typedef enum ftp_client_mod_e {
 
 typedef struct ftp_client_s {
     int socket;
-    char *ip;
+    struct in_addr ip;
     int port;
     bool is_authenticated;
     char *username;
