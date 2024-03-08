@@ -27,6 +27,7 @@ SOURCES			= src/main.c								\
 				  src/commands/port_command.c				\
 				  src/commands/store_command.c				\
 				  src/commands/retrieve_command.c			\
+				  src/commands/help_command.c				\
 
 TESTS			=
 
