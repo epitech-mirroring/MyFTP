@@ -21,6 +21,7 @@
 #include "commands/port_command.h"
 #include "commands/store_command.h"
 #include "commands/retrieve_command.h"
+#include "commands/help_command.h"
 
 static void register_commands(void)
 {
@@ -36,6 +37,7 @@ static void register_commands(void)
     register_port_command();
     register_store_command();
     register_retrieve_command();
+    register_help_command();
 }
 
 int main(int argc, char **argv)
