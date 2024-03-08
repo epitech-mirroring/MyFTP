@@ -74,6 +74,11 @@ void retr_callback(ftp_server_t *server, ftp_client_t *client, char **args)
         return;
     }
     file = fopen(path, "r");
+    if (file == NULL) {
+        dprintf(client->socket, "550 Can't read file on host.\r\n");
+        free(path);
+        return;
+    }
     handle_retr(client, file);
     free(path);
 }
