@@ -20,7 +20,7 @@ void register_retrieve_command(void)
     retr_command->expected_args_nb_min = 1;
     retr_command->expected_args_nb_max = 1;
     retr_command->callback = &retr_callback;
-    retr_command->help = "List files in the current directory";
+    retr_command->help = "Retrieve a file from the server.";
     retr_command->needs_auth = true;
     retr_command->needs_mode_selected = true;
     ftp_command_registry(true, retr_command);

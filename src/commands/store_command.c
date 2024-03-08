@@ -19,7 +19,7 @@ void register_store_command(void)
     store_command->expected_args_nb_min = 1;
     store_command->expected_args_nb_max = 1;
     store_command->callback = &store_callback;
-    store_command->help = "List files in the current directory";
+    store_command->help = "Store a file on the server";
     store_command->needs_auth = true;
     store_command->needs_mode_selected = true;
     ftp_command_registry(true, store_command);
