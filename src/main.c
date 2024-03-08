@@ -8,6 +8,7 @@
 
 #include <string.h>
 #include <printf.h>
+#include <unistd.h>
 #include "ftp_server.h"
 #include "commands/user_command.h"
 #include "commands/password_command.h"
@@ -42,6 +43,24 @@ static void register_commands(void)
     register_noop_command();
 }
 
+static bool check_args(char *arg_1, char *arg_2)
+{
+    if (arg_1 == NULL || arg_2 == NULL)
+        return false;
+    for (int i = 0; arg_1[i] != '\0'; i++)
+        if (arg_1[i] < '0' || arg_1[i] > '9')
+            return false;
+    if (atoi(arg_1) < 1024 || atoi(arg_1) > 65535)
+        return false;
+    if (access(arg_2, F_OK) == -1)
+        return false;
+    if (access(arg_2, R_OK) == -1)
+        return false;
+    if (chdir(arg_2) == -1)
+        return false;
+    return true;
+}
+
 int main(int argc, char **argv)
 {
     ftp_server_t *server;
@@ -55,6 +74,8 @@ int main(int argc, char **argv)
             " the Anonymous user\n");
         return 0;
     }
+    if (!check_args(argv[1], argv[2]))
+        return 84;
     server = ftp_server_create(atoi(argv[1]), argv[2]);
     register_commands();
     if (!ftp_server_start(server)) {
