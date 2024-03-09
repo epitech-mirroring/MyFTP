@@ -73,7 +73,7 @@ int main(int argc, char **argv)
             " socket listens\n");
         printf("\tpath is the path to the home directory for"
             " the Anonymous user\n");
-        return 0;
+        return strcmp(argv[1], "--help") == 0 ? 0 : 84;
     }
     if (!check_args(argv[1], argv[2]))
         return 84;
